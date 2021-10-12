@@ -5,14 +5,14 @@
         public static void Main()
         {
 #if (!DEBUG)
-            ServiceBase[] ServicesToRun;
+            PrintFileService[] ServicesToRun;
 
-            ServicesToRun = new ServiceBase[]
+            ServicesToRun = new PrintFileService[]
             {
                 new PrintFileService()
             };
 
-            ServiceBase.Run(ServicesToRun);
+            PrintFileService.Run(ServicesToRun);
 #else
             PrintFileService service = new PrintFileService();
 

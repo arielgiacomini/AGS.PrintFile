@@ -1,4 +1,5 @@
-﻿using AGS.PrintFile.Worker.Infrastructure;
+﻿using AGS.PrintFile.Worker.Entities;
+using AGS.PrintFile.Worker.Infrastructure;
 using System.Collections.Generic;
 using System.IO;
 
@@ -8,21 +9,25 @@ namespace AGS.PrintFile.Worker.Query
     {
         public static AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
 
-        public static IList<Entities.ControlePDF> ArquivosParaImprimir()
+        public static IList<ControlePDF> ArquivosParaImprimir()
         {
-            IList<Entities.ControlePDF> listPrintFile = new List<Entities.ControlePDF>();
+            IList<ControlePDF> listPrintFile = new List<ControlePDF>();
 
-            string[] arquivos = Directory.GetFiles($@"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}{_aGSPrintFileConfiguration.DiretorioFilesParaImpressao}");
+            var diretorio = $@"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}{_aGSPrintFileConfiguration.DiretorioFilesParaImpressao}";
+
+            string[] arquivos = Directory.GetFiles(diretorio);
 
             foreach (string arq in arquivos)
             {
                 FileInfo informacoesDoArquivo = new FileInfo(arq);
 
-                listPrintFile.Add(new Entities.ControlePDF
+                listPrintFile.Add(new ControlePDF
                 {
                     Pasta = informacoesDoArquivo.DirectoryName,
                     Arquivo = informacoesDoArquivo.Name,
-                    DataCadastro = informacoesDoArquivo.CreationTime
+                    DataCadastro = informacoesDoArquivo.CreationTime,
+                    Impresso = null,
+                    DataImpressao = null
                 });
             }
 

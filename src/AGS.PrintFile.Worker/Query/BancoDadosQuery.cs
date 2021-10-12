@@ -32,7 +32,7 @@ namespace AGS.PrintFile.Worker.Query
                                 var id = sqliteDataReader["Id"].ToString();
                                 var pasta = (string)sqliteDataReader["Pasta"];
                                 var arquivo = (string)sqliteDataReader["Arquivo"];
-                                var impresso = (bool?)sqliteDataReader["Impresso"];
+                                var impresso = sqliteDataReader["Impresso"].ToString();
                                 var dataCadastro = (DateTime)sqliteDataReader["DataCadastro"];
                                 var dataImpressao = sqliteDataReader["DataImpressao"].ToString();
 
@@ -41,7 +41,7 @@ namespace AGS.PrintFile.Worker.Query
                                     Id = Convert.ToInt32(id),
                                     Pasta = pasta,
                                     Arquivo = arquivo,
-                                    Impresso = impresso,
+                                    Impresso = Convert.ToBoolean(impresso != null && impresso != ""),
                                     DataCadastro = dataCadastro,
                                     DataImpressao = dataImpressao != "" ? (DateTime?)sqliteDataReader["DataImpressao"] : null
                                 });

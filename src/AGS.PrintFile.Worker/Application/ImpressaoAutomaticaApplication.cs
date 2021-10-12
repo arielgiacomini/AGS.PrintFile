@@ -38,7 +38,7 @@ namespace AGS.PrintFile.Worker.Application
 
                         Thread.Sleep(Convert.ToInt32(_aGSPrintFileConfiguration.TempoEsperarParaMoverArquivo));
 
-                        ArquivoCommand.MoverParaJaImpressos(imprimir);
+                        ArquivoCommand.MoverArquivoParaDiretorioJaImpressos(imprimir);
                     }
                 }
             }
@@ -80,7 +80,7 @@ namespace AGS.PrintFile.Worker.Application
 
                     BancoDadosCommand.UpdatePrintFile(controlePDF);
 
-                    ArquivoCommand.MoverParaJaImpressos(controlePDF);
+                    ArquivoCommand.MoverArquivoParaDiretorioJaImpressos(controlePDF);
                 }
             }
 

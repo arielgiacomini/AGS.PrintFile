@@ -7,10 +7,15 @@ namespace AGS.PrintFile.Worker.Command
     {
         public static AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
 
-        public static void MoverParaJaImpressos(Entities.ControlePDF arquivoParaMover)
+        public static void MoverArquivoParaDiretorioJaImpressos(Entities.ControlePDF arquivoParaMover)
         {
             var origem = $@"{arquivoParaMover.Pasta}\{arquivoParaMover.Arquivo}";
             var destino = $@"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}{_aGSPrintFileConfiguration.DiretorioFilesDepoisImpressao}{arquivoParaMover.Arquivo}";
+
+            if (File.Exists(destino))
+            {
+                File.Delete(destino);
+            }
 
             File.Move(origem, destino);
         }

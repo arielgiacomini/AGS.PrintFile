@@ -1,5 +1,6 @@
 ﻿using AGS.PrintFile.Worker.Command;
 using AGS.PrintFile.Worker.Entities;
+using AGS.PrintFile.Worker.Infrastructure;
 using AGS.PrintFile.Worker.Query;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace AGS.PrintFile.Worker.Application
 {
     public class ImpressaoAutomaticaApplication
     {
+        private readonly AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
+
         public ImpressaoAutomaticaApplication()
         {
 
@@ -33,7 +36,7 @@ namespace AGS.PrintFile.Worker.Application
                     {
                         BancoDadosCommand.UpdatePrintFile(imprimir);
 
-                        Thread.Sleep(60000);
+                        Thread.Sleep(Convert.ToInt32(_aGSPrintFileConfiguration.TempoEsperarParaMoverArquivo));
 
                         ArquivoCommand.MoverParaJaImpressos(imprimir);
                     }

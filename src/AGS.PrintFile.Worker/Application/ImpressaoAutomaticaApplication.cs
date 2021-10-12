@@ -22,6 +22,8 @@ namespace AGS.PrintFile.Worker.Application
         {
             while (true)
             {
+                Thread.Sleep(5000);
+
                 var arquivosFisicosInPath = ArquivoQuery.ArquivosParaImprimir();
 
                 var arquivosBancoDados = BancoDadosQuery.GetForAll();
@@ -58,14 +60,18 @@ namespace AGS.PrintFile.Worker.Application
                 }
                 else if (checagem == null)
                 {
-                    BancoDadosCommand.SavePrintFile(new ControlePDF
+                    var controlePDF = new ControlePDF
                     {
                         Pasta = arquivo.Pasta,
                         Arquivo = arquivo.Arquivo,
                         Impresso = false,
                         DataCadastro = arquivo.DataCadastro,
                         DataImpressao = null
-                    });
+                    };
+
+                    BancoDadosCommand.SavePrintFile(controlePDF);
+
+                    devolutiva.Add(controlePDF);
                 }
                 else
                 {
@@ -81,6 +87,8 @@ namespace AGS.PrintFile.Worker.Application
                     BancoDadosCommand.UpdatePrintFile(controlePDF);
 
                     ArquivoCommand.MoverArquivoParaDiretorioJaImpressos(controlePDF);
+
+                    devolutiva.Add(controlePDF);
                 }
             }
 

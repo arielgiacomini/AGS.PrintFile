@@ -26,9 +26,7 @@ namespace AGS.PrintFile.Worker.Application
 
                 foreach (var imprimir in disponiveisParaImpressao)
                 {
-                    //var impressaoRealizada = ImpressaoCommand.Imprimir(imprimir);
-
-                    var impressaoRealizada = ImpressaoCommand.Impressao2ponto0(imprimir);
+                    var impressaoRealizada = ImpressaoCommand.Imprimir3ponto0(imprimir);
 
                     if (impressaoRealizada)
                     {

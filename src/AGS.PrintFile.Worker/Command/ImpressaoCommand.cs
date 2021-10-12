@@ -6,7 +6,7 @@ namespace AGS.PrintFile.Worker.Command
 {
     public static class ImpressaoCommand
     {
-        public static bool Imprimir3ponto0(ControlePDF controlePDF)
+        public static bool Imprimir(ControlePDF controlePDF)
         {
             bool result;
 

@@ -12,11 +12,12 @@ namespace AGS.PrintFile.Worker.Query
         {
             IList<Entities.ControlePDF> listPrintFile = new List<Entities.ControlePDF>();
 
-            string[] arquivos = Directory.GetFiles($@"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}\Para_Imprimir\");
+            string[] arquivos = Directory.GetFiles($@"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}{_aGSPrintFileConfiguration.DiretorioFilesParaImpressao}");
 
             foreach (string arq in arquivos)
             {
                 FileInfo informacoesDoArquivo = new FileInfo(arq);
+
                 listPrintFile.Add(new Entities.ControlePDF
                 {
                     Pasta = informacoesDoArquivo.DirectoryName,

@@ -4,6 +4,7 @@ using AGS.PrintFile.Worker.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace AGS.PrintFile.Worker.Application
 {
@@ -18,19 +19,21 @@ namespace AGS.PrintFile.Worker.Application
         {
             while (true)
             {
-                var arquivosFisicos = ArquivoQuery.ArquivosParaImprimir();
+                var arquivosFisicosInPath = ArquivoQuery.ArquivosParaImprimir();
 
                 var arquivosBancoDados = BancoDadosQuery.GetForAll();
 
-                var disponiveisParaImpressao = ParaImprimirPosChecagem(arquivosFisicos, arquivosBancoDados);
+                var liberadosParaImpressao = ListaArquivosLiberadosParaImpressao(arquivosFisicosInPath, arquivosBancoDados);
 
-                foreach (var imprimir in disponiveisParaImpressao)
+                foreach (var imprimir in liberadosParaImpressao)
                 {
-                    var impressaoRealizada = ImpressaoCommand.Imprimir3ponto0(imprimir);
+                    var impressaoRealizada = ImpressaoCommand.Imprimir(imprimir);
 
                     if (impressaoRealizada)
                     {
                         BancoDadosCommand.UpdatePrintFile(imprimir);
+
+                        Thread.Sleep(60000);
 
                         ArquivoCommand.MoverParaJaImpressos(imprimir);
                     }
@@ -38,7 +41,7 @@ namespace AGS.PrintFile.Worker.Application
             }
         }
 
-        private IList<ControlePDF> ParaImprimirPosChecagem(IList<ControlePDF> arquivosFisicos, IList<ControlePDF> arquivosBancoDados)
+        private IList<ControlePDF> ListaArquivosLiberadosParaImpressao(IList<ControlePDF> arquivosFisicos, IList<ControlePDF> arquivosBancoDados)
         {
             IList<ControlePDF> devolutiva = new List<ControlePDF>();
 

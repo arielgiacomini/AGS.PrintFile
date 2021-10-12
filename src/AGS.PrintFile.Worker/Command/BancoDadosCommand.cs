@@ -33,13 +33,21 @@ namespace AGS.PrintFile.Worker.Command
             {
                 using (var cmd = new SQLiteCommand(AGSPrintFileDbContext.DbConnection()))
                 {
-                    if (printFile.Impresso != null || printFile.Impresso == false)
+                    if (printFile.Impresso == null || printFile.Impresso == false)
                     {
-                        cmd.CommandText = "UPDATE ControlePDF SET Impresso = @Impresso, DataImpressao = @DataImpressao WHERE Id = @Id";
-                        cmd.Parameters.AddWithValue("@Id", printFile.Id);
-                        cmd.Parameters.AddWithValue("@Impresso", printFile.Impresso);
-                        cmd.Parameters.AddWithValue("@DataImpressao", printFile.DataImpressao);
-                        cmd.ExecuteNonQuery();
+                        try
+                        {
+                            cmd.CommandText = "UPDATE ControlePDF SET Impresso = @Impresso, DataImpressao = @DataImpressao WHERE Id = @Id";
+                            cmd.Parameters.AddWithValue("@Id", printFile.Id);
+                            cmd.Parameters.AddWithValue("@Impresso", printFile.Impresso);
+                            cmd.Parameters.AddWithValue("@DataImpressao", printFile.DataImpressao);
+                            cmd.ExecuteNonQuery();
+                        }
+                        catch (Exception ex)
+                        {
+
+                            throw ;
+                        }
                     }
                 };
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AGS.PrintFile.Worker.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 
@@ -6,40 +7,50 @@ namespace AGS.PrintFile.Worker.Query
 {
     public class BancoDadosQuery
     {
+        private static readonly AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
+
         public static IList<Entities.ControlePDF> GetForAll()
         {
             IList<Entities.ControlePDF> listPrintFile = new List<Entities.ControlePDF>();
 
-            string cs = @"URI=file:C:\AGS\AGS.PrintFile.Worker.sqlite";
+            string cs = _aGSPrintFileConfiguration.ArquivoBancoDados;
 
-            using (var con = new SQLiteConnection(cs))
+            using (var sqliteConnection = new SQLiteConnection(cs))
             {
-                con.Open();
+                sqliteConnection.Open();
 
-                string stm = "SELECT * FROM ControlePDF;";
+                string sqlQuery = "SELECT * FROM ControlePDF;";
 
-                using (var cmd = new SQLiteCommand(stm, con))
+                using (var cmd = new SQLiteCommand(sqlQuery, sqliteConnection))
                 {
-                    using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                    using (SQLiteDataReader sqliteDataReader = cmd.ExecuteReader())
                     {
-                        while (rdr.Read())
+                        while (sqliteDataReader.Read())
                         {
-                            var id = rdr["Id"].ToString();
-                            var pasta = (string)rdr["Pasta"];
-                            var arquivo = (string)rdr["Arquivo"];
-                            var impresso = (bool?)rdr["Impresso"];
-                            var dataCadastro = (DateTime)rdr["DataCadastro"];
-                            var dataImpressao = rdr["DataImpressao"].ToString();
-
-                            listPrintFile.Add(new Entities.ControlePDF
+                            try
                             {
-                                Id = Convert.ToInt32(id),
-                                Pasta = pasta,
-                                Arquivo = arquivo,
-                                Impresso = impresso,
-                                DataCadastro = dataCadastro,
-                                DataImpressao = dataImpressao != "" ? (DateTime?)rdr["DataImpressao"] : null
-                            });
+                                var id = sqliteDataReader["Id"].ToString();
+                                var pasta = (string)sqliteDataReader["Pasta"];
+                                var arquivo = (string)sqliteDataReader["Arquivo"];
+                                var impresso = (bool?)sqliteDataReader["Impresso"];
+                                var dataCadastro = (DateTime)sqliteDataReader["DataCadastro"];
+                                var dataImpressao = sqliteDataReader["DataImpressao"].ToString();
+
+                                listPrintFile.Add(new Entities.ControlePDF
+                                {
+                                    Id = Convert.ToInt32(id),
+                                    Pasta = pasta,
+                                    Arquivo = arquivo,
+                                    Impresso = impresso,
+                                    DataCadastro = dataCadastro,
+                                    DataImpressao = dataImpressao != "" ? (DateTime?)sqliteDataReader["DataImpressao"] : null
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+
+                                throw ex;
+                            }
                         }
                     }
                 }

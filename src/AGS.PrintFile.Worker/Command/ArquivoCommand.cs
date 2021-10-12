@@ -9,7 +9,10 @@ namespace AGS.PrintFile.Worker.Command
 
         public static void MoverParaJaImpressos(Entities.ControlePDF arquivoParaMover)
         {
-            File.Move($@"{arquivoParaMover.Pasta}\{arquivoParaMover.Arquivo}", $@"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}\Ja_Impresso\");
+            var origem = $@"{arquivoParaMover.Pasta}\{arquivoParaMover.Arquivo}";
+            var destino = $@"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}{_aGSPrintFileConfiguration.DiretorioFilesDepoisImpressao}{arquivoParaMover.Arquivo}";
+
+            File.Move(origem, destino);
         }
     }
 }

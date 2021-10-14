@@ -1,5 +1,4 @@
 using AGS.PrintFile.Worker.Core.Application;
-using AGS.PrintFile.Worker.Core.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -18,7 +17,6 @@ namespace AGS.PrintFile.Worker.Core
                 {
                     services.AddHostedService<Worker>();
                     services.AddSingleton<ImpressaoAutomaticaApplication>();
-                    services.AddSingleton<AGSPrintFileConfiguration>();
-                });
+                }).UseWindowsService();
     }
 }

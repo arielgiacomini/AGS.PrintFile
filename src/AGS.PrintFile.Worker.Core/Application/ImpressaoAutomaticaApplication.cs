@@ -28,13 +28,13 @@ namespace AGS.PrintFile.Worker.Core.Application
                 Thread.Sleep(5000);
 
                 var arquivosFisicosInPath = ArquivoQuery.ArquivosParaImprimir();
-                AGSPrintFileLogger.Logger($"Buscou os arquivos fisicos: {arquivosFisicosInPath}");
+                AGSPrintFileLogger.Logger($"Buscou os arquivos fisicos: {arquivosFisicosInPath.Count}");
 
                 var arquivosBancoDados = BancoDadosQuery.GetForAll();
-                AGSPrintFileLogger.Logger($"Buscou os arquivos em banco de dados: {arquivosBancoDados}");
+                AGSPrintFileLogger.Logger($"Buscou os arquivos em banco de dados: {arquivosBancoDados.Count}");
 
                 var liberadosParaImpressao = ListaArquivosLiberadosParaImpressao(arquivosFisicosInPath, arquivosBancoDados);
-                AGSPrintFileLogger.Logger($"Efetuou conferência das informações e liberou os seguintes arquivos: {liberadosParaImpressao}");
+                AGSPrintFileLogger.Logger($"Efetuou conferência das informações e liberou os seguintes arquivos: {liberadosParaImpressao.Count}");
 
                 foreach (var imprimir in liberadosParaImpressao)
                 {

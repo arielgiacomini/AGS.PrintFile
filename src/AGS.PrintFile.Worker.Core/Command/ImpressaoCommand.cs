@@ -1,16 +1,18 @@
-﻿using AGS.PrintFile.Worker.Entities;
-using AGS.PrintFile.Worker.Infrastructure;
+﻿using AGS.PrintFile.Worker.Core.Entities;
+using AGS.PrintFile.Worker.Core.Infrastructure;
 using ceTe.DynamicPDF.Printing;
 using System;
 
-namespace AGS.PrintFile.Worker.Command
+namespace AGS.PrintFile.Worker.Core.Command
 {
     public static class ImpressaoCommand
     {
-        private static readonly AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
+        private static AGSPrintFileConfiguration _config { get; set; }
 
         public static bool Imprimir(ControlePDF controlePDF)
         {
+            _config = AGSPrintFileConfiguration.LoadFile();
+
             bool result;
 
             try
@@ -19,7 +21,7 @@ namespace AGS.PrintFile.Worker.Command
 
                 PrintJob printJob = new PrintJob(Printer.Default, pathAndFile);
 
-                printJob.PrintOptions.Color = Convert.ToBoolean(_aGSPrintFileConfiguration.ImpressaoColorido);
+                printJob.PrintOptions.Color = Convert.ToBoolean(_config.ImpressaoColorido);
 
                 printJob.Print();
 

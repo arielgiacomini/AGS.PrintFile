@@ -1,19 +1,21 @@
-﻿using AGS.PrintFile.Worker.Infrastructure;
+﻿using AGS.PrintFile.Worker.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 
-namespace AGS.PrintFile.Worker.Query
+namespace AGS.PrintFile.Worker.Core.Query
 {
     public class BancoDadosQuery
     {
-        private static readonly AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
+        private static AGSPrintFileConfiguration _config { get; set; }
 
         public static IList<Entities.ControlePDF> GetForAll()
         {
+            _config = AGSPrintFileConfiguration.LoadFile();
+
             IList<Entities.ControlePDF> listPrintFile = new List<Entities.ControlePDF>();
 
-            string cs = _aGSPrintFileConfiguration.ArquivoBancoDados;
+            string cs = _config.ArquivoBancoDados;
 
             using (var sqliteConnection = new SQLiteConnection(cs))
             {

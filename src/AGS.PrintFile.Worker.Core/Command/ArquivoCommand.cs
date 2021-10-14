@@ -1,16 +1,18 @@
-﻿using AGS.PrintFile.Worker.Infrastructure;
+﻿using AGS.PrintFile.Worker.Core.Infrastructure;
 using System.IO;
 
-namespace AGS.PrintFile.Worker.Command
+namespace AGS.PrintFile.Worker.Core.Command
 {
     public static class ArquivoCommand
     {
-        public static AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
+        private static AGSPrintFileConfiguration _config { get; set; }
 
         public static void MoverArquivoParaDiretorioJaImpressos(Entities.ControlePDF arquivoParaMover)
         {
+            _config = AGSPrintFileConfiguration.LoadFile();
+
             var origem = $@"{arquivoParaMover.Pasta}\{arquivoParaMover.Arquivo}";
-            var destino = $@"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}{_aGSPrintFileConfiguration.DiretorioFilesDepoisImpressao}{arquivoParaMover.Arquivo}";
+            var destino = $@"{_config.DiretorioPrincipalAplicacao}{_config.DiretorioFilesDepoisImpressao}{arquivoParaMover.Arquivo}";
 
             if (File.Exists(destino))
             {

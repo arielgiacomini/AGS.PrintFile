@@ -1,8 +1,8 @@
-﻿using AGS.PrintFile.Worker.Infrastructure;
+﻿using AGS.PrintFile.Worker.Core.Infrastructure;
 using System;
 using System.Data.SQLite;
 
-namespace AGS.PrintFile.Worker.Command
+namespace AGS.PrintFile.Worker.Core.Command
 {
     public class BancoDadosCommand
     {
@@ -45,8 +45,7 @@ namespace AGS.PrintFile.Worker.Command
                         }
                         catch (Exception ex)
                         {
-
-                            throw ;
+                            throw ex;
                         }
                     }
                 };

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-AGS.PrintFile.Worker.Core-B2E0F843-0012-4000-BA03-58526B7AAABF</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ceTe.DynamicPDF.Printing.NET" Version="4.19.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.19" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.115" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="C:\Users\ariel\.nuget\packages\cete.dynamicpdf.printing.net\4.19.0\build\netstandard20\..\..\runtimes\win-x64\DPDFPrintNative_x64.dll" Link="DLL\DPDFPrintNative_x64.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="C:\Users\ariel\.nuget\packages\cete.dynamicpdf.printing.net\4.19.0\build\netstandard20\..\..\runtimes\win-x86\DPDFPrintNative_x86.dll" Link="DLL\DPDFPrintNative_x86.dll" />
+  </ItemGroup>
+</Project>

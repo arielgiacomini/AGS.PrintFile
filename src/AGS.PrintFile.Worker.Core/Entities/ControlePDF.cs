@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AGS.PrintFile.Worker.Entities
+namespace AGS.PrintFile.Worker.Core.Entities
 {
     public class ControlePDF
     {

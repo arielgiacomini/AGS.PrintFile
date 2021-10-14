@@ -1,52 +1,61 @@
-﻿using AGS.PrintFile.Worker.Command;
-using AGS.PrintFile.Worker.Entities;
-using AGS.PrintFile.Worker.Infrastructure;
-using AGS.PrintFile.Worker.Query;
+﻿using AGS.PrintFile.Worker.Core.Command;
+using AGS.PrintFile.Worker.Core.Entities;
+using AGS.PrintFile.Worker.Core.Infrastructure;
+using AGS.PrintFile.Worker.Core.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace AGS.PrintFile.Worker.Application
+namespace AGS.PrintFile.Worker.Core.Application
 {
     public class ImpressaoAutomaticaApplication
     {
-        private readonly AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
+        private static AGSPrintFileConfiguration _config { get; set; }
 
         public ImpressaoAutomaticaApplication()
         {
-
         }
 
         public void Execute()
         {
+            _config = AGSPrintFileConfiguration.LoadFile();
+
+            AGSPrintFileLogger.Logger("Iniciando o método Execute()");
+
             while (true)
             {
                 Thread.Sleep(5000);
 
                 var arquivosFisicosInPath = ArquivoQuery.ArquivosParaImprimir();
+                AGSPrintFileLogger.Logger($"Buscou os arquivos fisicos: {arquivosFisicosInPath}");
 
                 var arquivosBancoDados = BancoDadosQuery.GetForAll();
+                AGSPrintFileLogger.Logger($"Buscou os arquivos em banco de dados: {arquivosBancoDados}");
 
                 var liberadosParaImpressao = ListaArquivosLiberadosParaImpressao(arquivosFisicosInPath, arquivosBancoDados);
+                AGSPrintFileLogger.Logger($"Efetuou conferência das informações e liberou os seguintes arquivos: {liberadosParaImpressao}");
 
                 foreach (var imprimir in liberadosParaImpressao)
                 {
                     var impressaoRealizada = ImpressaoCommand.Imprimir(imprimir);
+                    AGSPrintFileLogger.Logger($"O envio para impressora ocorreu? {impressaoRealizada}");
 
                     if (impressaoRealizada)
                     {
                         BancoDadosCommand.UpdatePrintFile(imprimir);
+                        AGSPrintFileLogger.Logger($"Atualiza banco de dados após impressão. UpdatePrintFile()");
 
-                        Thread.Sleep(Convert.ToInt32(_aGSPrintFileConfiguration.TempoEsperarParaMoverArquivo));
+                        Thread.Sleep(Convert.ToInt32(_config.TempoEsperarParaMoverArquivo));
 
                         ArquivoCommand.MoverArquivoParaDiretorioJaImpressos(imprimir);
+                        AGSPrintFileLogger.Logger($"Movendo arquivo do diretorio de origem para o já Impresso");
                     }
                 }
             }
         }
 
-        private IList<ControlePDF> ListaArquivosLiberadosParaImpressao(IList<ControlePDF> arquivosFisicos, IList<ControlePDF> arquivosBancoDados)
+        private static IList<ControlePDF> ListaArquivosLiberadosParaImpressao(IList<ControlePDF> arquivosFisicos, IList<ControlePDF> arquivosBancoDados)
         {
             IList<ControlePDF> devolutiva = new List<ControlePDF>();
 

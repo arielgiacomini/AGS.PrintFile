@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Data.SQLite;
 
-namespace AGS.PrintFile.Worker.Infrastructure
+namespace AGS.PrintFile.Worker.Core.Infrastructure
 {
     public static class AGSPrintFileDbContext
     {
         private static SQLiteConnection SQLiteConnection;
-        public static AGSPrintFileConfiguration _aGSPrintFileConfiguration = new AGSPrintFileConfiguration();
+
+        private static AGSPrintFileConfiguration _config { get; set; }
 
         public static SQLiteConnection DbConnection()
         {
-            SQLiteConnection = new SQLiteConnection($"DataSource={_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}AGS.PrintFile.Worker.sqlite; Version=3;");
+            _config = AGSPrintFileConfiguration.LoadFile();
+
+            SQLiteConnection = new SQLiteConnection($"DataSource={_config.DiretorioPrincipalAplicacao}AGS.PrintFile.Worker.sqlite; Version=3;");
             SQLiteConnection.Open();
             return SQLiteConnection;
         }
@@ -19,7 +22,9 @@ namespace AGS.PrintFile.Worker.Infrastructure
         {
             try
             {
-                SQLiteConnection.CreateFile($"{_aGSPrintFileConfiguration.DiretorioPrincipalAplicacao}AGS.PrintFile.Worker.sqlite");
+                _config = AGSPrintFileConfiguration.LoadFile();
+
+                SQLiteConnection.CreateFile($"{_config.DiretorioPrincipalAplicacao}AGS.PrintFile.Worker.sqlite");
             }
             catch (Exception ex)
             {

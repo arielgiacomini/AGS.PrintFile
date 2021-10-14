@@ -15,6 +15,7 @@ namespace AGS.PrintFile.Worker.Core.Infrastructure
         public string TempoEsperarParaMoverArquivo { get; set; }
         public string ImpressaoColorido { get; set; }
         public string PathLogDefault { get; set; }
+        public string NomeImpressora { get; set; }
 
         public static AGSPrintFileConfiguration LoadFile()
         {

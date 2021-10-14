@@ -43,6 +43,9 @@ namespace AGS.PrintFile.Worker.Core.Application
 
                     if (impressaoRealizada)
                     {
+                        imprimir.Impresso = true;
+                        imprimir.DataImpressao = DateTime.Now;
+
                         BancoDadosCommand.UpdatePrintFile(imprimir);
                         AGSPrintFileLogger.Logger($"Atualiza banco de dados após impressão. UpdatePrintFile()");
 
@@ -71,6 +74,7 @@ namespace AGS.PrintFile.Worker.Core.Application
                 {
                     var controlePDF = new ControlePDF
                     {
+                        Id = arquivo.Id,
                         Pasta = arquivo.Pasta,
                         Arquivo = arquivo.Arquivo,
                         Impresso = false,
@@ -78,7 +82,9 @@ namespace AGS.PrintFile.Worker.Core.Application
                         DataImpressao = null
                     };
 
-                    BancoDadosCommand.SavePrintFile(controlePDF);
+                    var iD = BancoDadosCommand.SavePrintFile(controlePDF);
+
+                    controlePDF.Id = Convert.ToInt32(iD);
 
                     devolutiva.Add(controlePDF);
                 }

@@ -2,6 +2,7 @@
 using AGS.PrintFile.Worker.Core.Infrastructure;
 using ceTe.DynamicPDF.Printing;
 using System;
+using System.Linq;
 
 namespace AGS.PrintFile.Worker.Core.Command
 {
@@ -19,7 +20,11 @@ namespace AGS.PrintFile.Worker.Core.Command
             {
                 var pathAndFile = $@"{controlePDF.Pasta}\{controlePDF.Arquivo}";
 
-                PrintJob printJob = new PrintJob(Printer.Default, pathAndFile);
+                var impressoras = Printer.GetLocalPrinters();
+
+                var impressoraDefinida = impressoras.Where(x => x.Name == _config.NomeImpressora).FirstOrDefault();
+
+                PrintJob printJob = new PrintJob(impressoraDefinida, pathAndFile);
 
                 printJob.PrintOptions.Color = Convert.ToBoolean(_config.ImpressaoColorido);
 
@@ -31,6 +36,7 @@ namespace AGS.PrintFile.Worker.Core.Command
             }
             catch (Exception ex)
             {
+                AGSPrintFileLogger.Logger($"Erro no Método Imprimir(): {ex}");
                 throw ex;
             }
 

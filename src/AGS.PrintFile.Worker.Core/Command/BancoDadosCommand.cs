@@ -6,7 +6,7 @@ namespace AGS.PrintFile.Worker.Core.Command
 {
     public class BancoDadosCommand
     {
-        public static void SavePrintFile(Entities.ControlePDF printFile)
+        public static long SavePrintFile(Entities.ControlePDF printFile)
         {
             try
             {
@@ -19,6 +19,10 @@ namespace AGS.PrintFile.Worker.Core.Command
                     cmd.Parameters.AddWithValue("@DataCadastro", printFile.DataCadastro);
                     cmd.Parameters.AddWithValue("@DataImpressao", printFile.DataImpressao);
                     cmd.ExecuteNonQuery();
+
+                    long rowID = cmd.Connection.LastInsertRowId;
+
+                    return rowID;
                 }
             }
             catch (Exception ex)
@@ -33,20 +37,17 @@ namespace AGS.PrintFile.Worker.Core.Command
             {
                 using (var cmd = new SQLiteCommand(AGSPrintFileDbContext.DbConnection()))
                 {
-                    if (printFile.Impresso == null || printFile.Impresso == false)
+                    try
                     {
-                        try
-                        {
-                            cmd.CommandText = "UPDATE ControlePDF SET Impresso = @Impresso, DataImpressao = @DataImpressao WHERE Id = @Id";
-                            cmd.Parameters.AddWithValue("@Id", printFile.Id);
-                            cmd.Parameters.AddWithValue("@Impresso", printFile.Impresso);
-                            cmd.Parameters.AddWithValue("@DataImpressao", printFile.DataImpressao);
-                            cmd.ExecuteNonQuery();
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
-                        }
+                        cmd.CommandText = "UPDATE ControlePDF SET Impresso = @Impresso, DataImpressao = @DataImpressao WHERE Id = @Id";
+                        cmd.Parameters.AddWithValue("@Id", printFile.Id);
+                        cmd.Parameters.AddWithValue("@Impresso", printFile.Impresso);
+                        cmd.Parameters.AddWithValue("@DataImpressao", printFile.DataImpressao);
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
                     }
                 };
             }
